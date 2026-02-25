@@ -3,8 +3,8 @@
 Automated drift detection between Structurizr DSL architecture diagrams and actual code. Keep your architecture documentation in sync with reality.
 
 **Companion code for the C4 series on [The Engineer's Lens](https://github.com/lnm8910/the-engineers-lens):**
-- [Part 1: C4 Model Deep Dive](https://github.com/lnm8910/the-engineers-lens/blob/main/8.living-c4-architecture/docs/c4-model-deep-dive.md) — C4 fundamentals, the 4 levels, Structurizr DSL
-- [Part 2: Living C4](https://github.com/lnm8910/the-engineers-lens/blob/main/8.living-c4-architecture/docs/living-c4-architecture.md) — Drift detection, CI/CD, auto-generated diagrams
+- [Part 1: C4 Model Deep Dive](https://github.com/lnm8910/the-engineers-lens/blob/main/8.living-c4-architecture/docs/c4-model-deep-dive.md) - C4 fundamentals, the 4 levels, Structurizr DSL
+- [Part 2: Living C4](https://github.com/lnm8910/the-engineers-lens/blob/main/8.living-c4-architecture/docs/living-c4-architecture.md) - Drift detection, CI/CD, auto-generated diagrams
 
 ## Quick Start
 
@@ -106,10 +106,10 @@ The drift detector compares two sources of truth:
 
 ### Checks Performed
 
-- **Service Existence** — Every DSL container exists in docker-compose
-- **Undocumented Services** — No services in docker-compose missing from DSL
-- **Source Directories** — Inferred source paths exist on disk
-- **Dependencies** — `depends_on` and env vars match DSL relationships
+- **Service Existence** - Every DSL container exists in docker-compose
+- **Undocumented Services** - No services in docker-compose missing from DSL
+- **Source Directories** - Inferred source paths exist on disk
+- **Dependencies** - `depends_on` and env vars match DSL relationships
 
 ### Triggering Drift
 
@@ -158,10 +158,9 @@ Detailed component diagrams for each service showing controllers, services, repo
 
 ## Resources
 
-- [C4 Model](https://c4model.com/) — The C4 model for visualizing software architecture
-- [Structurizr DSL](https://structurizr.com/dsl) — DSL language reference
-- [Structurizr CLI](https://github.com/structurizr/cli) — Command-line tools
-- [Structurizr Lite](https://structurizr.com/help/lite) — Local diagram server
+- [C4 Model](https://c4model.com/) - The C4 model for visualizing software architecture
+- [Structurizr DSL](https://docs.structurizr.com/dsl) - DSL language reference
+- [Structurizr Tooling](https://docs.structurizr.com/) - CLI, diagram generation, and related tools
 
 ## License
 
