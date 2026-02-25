@@ -1,0 +1,807 @@
+{
+  "configuration" : { },
+  "description" : "Architecture documentation for the e-commerce microservices platform",
+  "documentation" : { },
+  "id" : 1,
+  "lastModifiedAgent" : "structurizr-ui",
+  "lastModifiedDate" : "2026-01-25T02:15:39Z",
+  "model" : {
+    "people" : [ {
+      "description" : "A customer who browses and purchases products",
+      "id" : "1",
+      "name" : "Customer",
+      "properties" : {
+        "structurizr.dsl.identifier" : "customer"
+      },
+      "relationships" : [ {
+        "description" : "Places orders, manages account",
+        "destinationId" : "5",
+        "id" : "31",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Makes API requests",
+        "destinationId" : "6",
+        "id" : "35",
+        "sourceId" : "1",
+        "tags" : "Relationship",
+        "technology" : "HTTPS/JSON"
+      } ],
+      "tags" : "Element,Person,Customer"
+    }, {
+      "description" : "An administrator who manages products and orders",
+      "id" : "2",
+      "name" : "Admin",
+      "properties" : {
+        "structurizr.dsl.identifier" : "admin"
+      },
+      "relationships" : [ {
+        "description" : "Manages products and orders",
+        "destinationId" : "5",
+        "id" : "32",
+        "sourceId" : "2",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Makes API requests",
+        "destinationId" : "6",
+        "id" : "36",
+        "sourceId" : "2",
+        "tags" : "Relationship",
+        "technology" : "HTTPS/JSON"
+      } ],
+      "tags" : "Element,Person,Admin"
+    } ],
+    "softwareSystems" : [ {
+      "description" : "Handles payment processing (Stripe)",
+      "documentation" : { },
+      "id" : "3",
+      "name" : "Payment Gateway",
+      "properties" : {
+        "structurizr.dsl.identifier" : "paymentGateway"
+      },
+      "tags" : "Element,Software System,External System"
+    }, {
+      "description" : "Sends transactional emails (SendGrid)",
+      "documentation" : { },
+      "id" : "4",
+      "name" : "Email Provider",
+      "properties" : {
+        "structurizr.dsl.identifier" : "emailProvider"
+      },
+      "tags" : "Element,Software System,External System"
+    }, {
+      "containers" : [ {
+        "description" : "Single entry point for all client requests. Handles routing, rate limiting, and authentication.",
+        "documentation" : { },
+        "id" : "6",
+        "name" : "API Gateway",
+        "properties" : {
+          "structurizr.dsl.identifier" : "apiGateway"
+        },
+        "relationships" : [ {
+          "description" : "Routes user requests",
+          "destinationId" : "7",
+          "id" : "23",
+          "sourceId" : "6",
+          "tags" : "Relationship",
+          "technology" : "HTTP/JSON"
+        }, {
+          "description" : "Routes order requests",
+          "destinationId" : "12",
+          "id" : "24",
+          "sourceId" : "6",
+          "tags" : "Relationship",
+          "technology" : "HTTP/JSON"
+        }, {
+          "description" : "Routes requests",
+          "destinationId" : "8",
+          "id" : "38",
+          "sourceId" : "6",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Routes requests",
+          "destinationId" : "13",
+          "id" : "44",
+          "sourceId" : "6",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Gateway",
+        "technology" : "Node.js/Express"
+      }, {
+        "components" : [ {
+          "description" : "REST API endpoints for user operations",
+          "documentation" : { },
+          "id" : "8",
+          "name" : "User Controller",
+          "properties" : {
+            "structurizr.dsl.identifier" : "userController"
+          },
+          "relationships" : [ {
+            "description" : "Authenticates requests",
+            "destinationId" : "9",
+            "id" : "39",
+            "sourceId" : "8",
+            "tags" : "Relationship"
+          }, {
+            "description" : "CRUD operations",
+            "destinationId" : "10",
+            "id" : "40",
+            "sourceId" : "8",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Express Router"
+        }, {
+          "description" : "Handles JWT token generation and validation",
+          "documentation" : { },
+          "id" : "9",
+          "name" : "Auth Service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "authService"
+          },
+          "relationships" : [ {
+            "description" : "Stores/validates sessions",
+            "destinationId" : "11",
+            "id" : "41",
+            "sourceId" : "9",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "jsonwebtoken"
+        }, {
+          "description" : "Data access layer for user data",
+          "documentation" : { },
+          "id" : "10",
+          "name" : "User Repository",
+          "properties" : {
+            "structurizr.dsl.identifier" : "userRepository"
+          },
+          "relationships" : [ {
+            "description" : "SQL queries",
+            "destinationId" : "20",
+            "id" : "42",
+            "sourceId" : "10",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "pg"
+        }, {
+          "description" : "Caches user sessions and frequently accessed data",
+          "documentation" : { },
+          "id" : "11",
+          "name" : "Cache Service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "cacheService"
+          },
+          "relationships" : [ {
+            "description" : "Cache operations",
+            "destinationId" : "21",
+            "id" : "43",
+            "sourceId" : "11",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "redis"
+        } ],
+        "description" : "Manages user accounts, authentication, and profiles",
+        "documentation" : { },
+        "id" : "7",
+        "name" : "User Service",
+        "properties" : {
+          "structurizr.dsl.identifier" : "userService"
+        },
+        "relationships" : [ {
+          "description" : "Reads/writes user data",
+          "destinationId" : "20",
+          "id" : "25",
+          "sourceId" : "7",
+          "tags" : "Relationship",
+          "technology" : "TCP/SQL"
+        }, {
+          "description" : "Caches sessions",
+          "destinationId" : "21",
+          "id" : "26",
+          "sourceId" : "7",
+          "tags" : "Relationship",
+          "technology" : "TCP/Redis Protocol"
+        } ],
+        "tags" : "Element,Container,Service",
+        "technology" : "Node.js/Express"
+      }, {
+        "components" : [ {
+          "description" : "REST API endpoints for order operations",
+          "documentation" : { },
+          "id" : "13",
+          "name" : "Order Controller",
+          "properties" : {
+            "structurizr.dsl.identifier" : "orderController"
+          },
+          "relationships" : [ {
+            "description" : "Processes orders",
+            "destinationId" : "14",
+            "id" : "45",
+            "sourceId" : "13",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Express Router"
+        }, {
+          "description" : "Business logic for order processing",
+          "documentation" : { },
+          "id" : "14",
+          "name" : "Order Processor",
+          "properties" : {
+            "structurizr.dsl.identifier" : "orderProcessor"
+          },
+          "relationships" : [ {
+            "description" : "Persists orders",
+            "destinationId" : "15",
+            "id" : "46",
+            "sourceId" : "14",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Publishes events",
+            "destinationId" : "16",
+            "id" : "47",
+            "sourceId" : "14",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Custom"
+        }, {
+          "description" : "Data access layer for order data",
+          "documentation" : { },
+          "id" : "15",
+          "name" : "Order Repository",
+          "properties" : {
+            "structurizr.dsl.identifier" : "orderRepository"
+          },
+          "relationships" : [ {
+            "description" : "SQL queries",
+            "destinationId" : "20",
+            "id" : "48",
+            "sourceId" : "15",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "pg"
+        }, {
+          "description" : "Publishes order events to message queue",
+          "documentation" : { },
+          "id" : "16",
+          "name" : "Message Publisher",
+          "properties" : {
+            "structurizr.dsl.identifier" : "messagePublisher"
+          },
+          "relationships" : [ {
+            "description" : "Publishes messages",
+            "destinationId" : "22",
+            "id" : "49",
+            "sourceId" : "16",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "amqplib"
+        } ],
+        "description" : "Handles order creation, processing, and history",
+        "documentation" : { },
+        "id" : "12",
+        "name" : "Order Service",
+        "properties" : {
+          "structurizr.dsl.identifier" : "orderService"
+        },
+        "relationships" : [ {
+          "description" : "Reads/writes order data",
+          "destinationId" : "20",
+          "id" : "27",
+          "sourceId" : "12",
+          "tags" : "Relationship",
+          "technology" : "TCP/SQL"
+        }, {
+          "description" : "Validates users",
+          "destinationId" : "7",
+          "id" : "28",
+          "sourceId" : "12",
+          "tags" : "Relationship",
+          "technology" : "HTTP/JSON"
+        }, {
+          "description" : "Publishes order events",
+          "destinationId" : "22",
+          "id" : "29",
+          "sourceId" : "12",
+          "tags" : "Relationship",
+          "technology" : "AMQP"
+        } ],
+        "tags" : "Element,Container,Service",
+        "technology" : "Node.js/Express"
+      }, {
+        "components" : [ {
+          "description" : "Consumes order events from queue",
+          "documentation" : { },
+          "id" : "18",
+          "name" : "Message Consumer",
+          "properties" : {
+            "structurizr.dsl.identifier" : "messageConsumer"
+          },
+          "relationships" : [ {
+            "description" : "Subscribes to events",
+            "destinationId" : "22",
+            "id" : "50",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Triggers emails",
+            "destinationId" : "19",
+            "id" : "51",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "amqplib"
+        }, {
+          "description" : "Sends emails via SMTP",
+          "documentation" : { },
+          "id" : "19",
+          "name" : "Email Sender",
+          "properties" : {
+            "structurizr.dsl.identifier" : "emailSender"
+          },
+          "relationships" : [ {
+            "description" : "Sends via SMTP",
+            "destinationId" : "4",
+            "id" : "52",
+            "sourceId" : "19",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "nodemailer"
+        } ],
+        "description" : "Sends notifications for order events",
+        "documentation" : { },
+        "id" : "17",
+        "name" : "Notification Service",
+        "properties" : {
+          "structurizr.dsl.identifier" : "notificationService"
+        },
+        "relationships" : [ {
+          "description" : "Consumes order events",
+          "destinationId" : "22",
+          "id" : "30",
+          "sourceId" : "17",
+          "tags" : "Relationship",
+          "technology" : "AMQP"
+        }, {
+          "description" : "Sends emails",
+          "destinationId" : "4",
+          "id" : "37",
+          "sourceId" : "17",
+          "tags" : "Relationship",
+          "technology" : "SMTP"
+        } ],
+        "tags" : "Element,Container,Service",
+        "technology" : "Node.js"
+      }, {
+        "description" : "Stores user and order data",
+        "documentation" : { },
+        "id" : "20",
+        "name" : "PostgreSQL Database",
+        "properties" : {
+          "structurizr.dsl.identifier" : "postgresDb"
+        },
+        "tags" : "Element,Container,Database",
+        "technology" : "PostgreSQL 15"
+      }, {
+        "description" : "Caches sessions and hot data",
+        "documentation" : { },
+        "id" : "21",
+        "name" : "Redis Cache",
+        "properties" : {
+          "structurizr.dsl.identifier" : "redisCache"
+        },
+        "tags" : "Element,Container,Database",
+        "technology" : "Redis 7"
+      }, {
+        "description" : "Message broker for async communication",
+        "documentation" : { },
+        "id" : "22",
+        "name" : "RabbitMQ",
+        "properties" : {
+          "structurizr.dsl.identifier" : "rabbitMq"
+        },
+        "tags" : "Element,Container,Queue",
+        "technology" : "RabbitMQ 3"
+      } ],
+      "description" : "Allows customers to browse products and place orders",
+      "documentation" : { },
+      "id" : "5",
+      "name" : "E-Commerce Platform",
+      "properties" : {
+        "structurizr.dsl.identifier" : "ecommerce"
+      },
+      "relationships" : [ {
+        "description" : "Processes payments",
+        "destinationId" : "3",
+        "id" : "33",
+        "sourceId" : "5",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Sends transactional emails",
+        "destinationId" : "4",
+        "id" : "34",
+        "sourceId" : "5",
+        "tags" : "Relationship"
+      } ],
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "E-Commerce Platform",
+  "properties" : {
+    "structurizr.inspection.info" : "0",
+    "structurizr.inspection.ignore" : "0",
+    "structurizr.inspection.error" : "22",
+    "structurizr.inspection.warning" : "0",
+    "structurizr.dsl" : "d29ya3NwYWNlICJFLUNvbW1lcmNlIFBsYXRmb3JtIiAiQXJjaGl0ZWN0dXJlIGRvY3VtZW50YXRpb24gZm9yIHRoZSBlLWNvbW1lcmNlIG1pY3Jvc2VydmljZXMgcGxhdGZvcm0iIHsKCiAgICBtb2RlbCB7CiAgICAgICAgIyBFeHRlcm5hbCBhY3RvcnMKICAgICAgICBjdXN0b21lciA9IHBlcnNvbiAiQ3VzdG9tZXIiICJBIGN1c3RvbWVyIHdobyBicm93c2VzIGFuZCBwdXJjaGFzZXMgcHJvZHVjdHMiICJDdXN0b21lciIKICAgICAgICBhZG1pbiA9IHBlcnNvbiAiQWRtaW4iICJBbiBhZG1pbmlzdHJhdG9yIHdobyBtYW5hZ2VzIHByb2R1Y3RzIGFuZCBvcmRlcnMiICJBZG1pbiIKCiAgICAgICAgIyBFeHRlcm5hbCBzeXN0ZW1zCiAgICAgICAgcGF5bWVudEdhdGV3YXkgPSBzb2Z0d2FyZVN5c3RlbSAiUGF5bWVudCBHYXRld2F5IiAiSGFuZGxlcyBwYXltZW50IHByb2Nlc3NpbmcgKFN0cmlwZSkiICJFeHRlcm5hbCBTeXN0ZW0iCiAgICAgICAgZW1haWxQcm92aWRlciA9IHNvZnR3YXJlU3lzdGVtICJFbWFpbCBQcm92aWRlciIgIlNlbmRzIHRyYW5zYWN0aW9uYWwgZW1haWxzIChTZW5kR3JpZCkiICJFeHRlcm5hbCBTeXN0ZW0iCgogICAgICAgICMgT3VyIHN5c3RlbQogICAgICAgIGVjb21tZXJjZSA9IHNvZnR3YXJlU3lzdGVtICJFLUNvbW1lcmNlIFBsYXRmb3JtIiAiQWxsb3dzIGN1c3RvbWVycyB0byBicm93c2UgcHJvZHVjdHMgYW5kIHBsYWNlIG9yZGVycyIgewoKICAgICAgICAgICAgIyBDb250YWluZXJzCiAgICAgICAgICAgIGFwaUdhdGV3YXkgPSBjb250YWluZXIgIkFQSSBHYXRld2F5IiAiU2luZ2xlIGVudHJ5IHBvaW50IGZvciBhbGwgY2xpZW50IHJlcXVlc3RzLiBIYW5kbGVzIHJvdXRpbmcsIHJhdGUgbGltaXRpbmcsIGFuZCBhdXRoZW50aWNhdGlvbi4iICJOb2RlLmpzL0V4cHJlc3MiICJHYXRld2F5IgoKICAgICAgICAgICAgdXNlclNlcnZpY2UgPSBjb250YWluZXIgIlVzZXIgU2VydmljZSIgIk1hbmFnZXMgdXNlciBhY2NvdW50cywgYXV0aGVudGljYXRpb24sIGFuZCBwcm9maWxlcyIgIk5vZGUuanMvRXhwcmVzcyIgIlNlcnZpY2UiIHsKICAgICAgICAgICAgICAgIHVzZXJDb250cm9sbGVyID0gY29tcG9uZW50ICJVc2VyIENvbnRyb2xsZXIiICJSRVNUIEFQSSBlbmRwb2ludHMgZm9yIHVzZXIgb3BlcmF0aW9ucyIgIkV4cHJlc3MgUm91dGVyIgogICAgICAgICAgICAgICAgYXV0aFNlcnZpY2UgPSBjb21wb25lbnQgIkF1dGggU2VydmljZSIgIkhhbmRsZXMgSldUIHRva2VuIGdlbmVyYXRpb24gYW5kIHZhbGlkYXRpb24iICJqc29ud2VidG9rZW4iCiAgICAgICAgICAgICAgICB1c2VyUmVwb3NpdG9yeSA9IGNvbXBvbmVudCAiVXNlciBSZXBvc2l0b3J5IiAiRGF0YSBhY2Nlc3MgbGF5ZXIgZm9yIHVzZXIgZGF0YSIgInBnIgogICAgICAgICAgICAgICAgY2FjaGVTZXJ2aWNlID0gY29tcG9uZW50ICJDYWNoZSBTZXJ2aWNlIiAiQ2FjaGVzIHVzZXIgc2Vzc2lvbnMgYW5kIGZyZXF1ZW50bHkgYWNjZXNzZWQgZGF0YSIgInJlZGlzIgogICAgICAgICAgICB9CgogICAgICAgICAgICBvcmRlclNlcnZpY2UgPSBjb250YWluZXIgIk9yZGVyIFNlcnZpY2UiICJIYW5kbGVzIG9yZGVyIGNyZWF0aW9uLCBwcm9jZXNzaW5nLCBhbmQgaGlzdG9yeSIgIk5vZGUuanMvRXhwcmVzcyIgIlNlcnZpY2UiIHsKICAgICAgICAgICAgICAgIG9yZGVyQ29udHJvbGxlciA9IGNvbXBvbmVudCAiT3JkZXIgQ29udHJvbGxlciIgIlJFU1QgQVBJIGVuZHBvaW50cyBmb3Igb3JkZXIgb3BlcmF0aW9ucyIgIkV4cHJlc3MgUm91dGVyIgogICAgICAgICAgICAgICAgb3JkZXJQcm9jZXNzb3IgPSBjb21wb25lbnQgIk9yZGVyIFByb2Nlc3NvciIgIkJ1c2luZXNzIGxvZ2ljIGZvciBvcmRlciBwcm9jZXNzaW5nIiAiQ3VzdG9tIgogICAgICAgICAgICAgICAgb3JkZXJSZXBvc2l0b3J5ID0gY29tcG9uZW50ICJPcmRlciBSZXBvc2l0b3J5IiAiRGF0YSBhY2Nlc3MgbGF5ZXIgZm9yIG9yZGVyIGRhdGEiICJwZyIKICAgICAgICAgICAgICAgIG1lc3NhZ2VQdWJsaXNoZXIgPSBjb21wb25lbnQgIk1lc3NhZ2UgUHVibGlzaGVyIiAiUHVibGlzaGVzIG9yZGVyIGV2ZW50cyB0byBtZXNzYWdlIHF1ZXVlIiAiYW1xcGxpYiIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgbm90aWZpY2F0aW9uU2VydmljZSA9IGNvbnRhaW5lciAiTm90aWZpY2F0aW9uIFNlcnZpY2UiICJTZW5kcyBub3RpZmljYXRpb25zIGZvciBvcmRlciBldmVudHMiICJOb2RlLmpzIiAiU2VydmljZSIgewogICAgICAgICAgICAgICAgbWVzc2FnZUNvbnN1bWVyID0gY29tcG9uZW50ICJNZXNzYWdlIENvbnN1bWVyIiAiQ29uc3VtZXMgb3JkZXIgZXZlbnRzIGZyb20gcXVldWUiICJhbXFwbGliIgogICAgICAgICAgICAgICAgZW1haWxTZW5kZXIgPSBjb21wb25lbnQgIkVtYWlsIFNlbmRlciIgIlNlbmRzIGVtYWlscyB2aWEgU01UUCIgIm5vZGVtYWlsZXIiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgICMgRGF0YSBzdG9yZXMKICAgICAgICAgICAgcG9zdGdyZXNEYiA9IGNvbnRhaW5lciAiUG9zdGdyZVNRTCBEYXRhYmFzZSIgIlN0b3JlcyB1c2VyIGFuZCBvcmRlciBkYXRhIiAiUG9zdGdyZVNRTCAxNSIgIkRhdGFiYXNlIgogICAgICAgICAgICByZWRpc0NhY2hlID0gY29udGFpbmVyICJSZWRpcyBDYWNoZSIgIkNhY2hlcyBzZXNzaW9ucyBhbmQgaG90IGRhdGEiICJSZWRpcyA3IiAiRGF0YWJhc2UiCiAgICAgICAgICAgIHJhYmJpdE1xID0gY29udGFpbmVyICJSYWJiaXRNUSIgIk1lc3NhZ2UgYnJva2VyIGZvciBhc3luYyBjb21tdW5pY2F0aW9uIiAiUmFiYml0TVEgMyIgIlF1ZXVlIgoKICAgICAgICAgICAgIyBDb250YWluZXItbGV2ZWwgcmVsYXRpb25zaGlwcyAoaW5zaWRlIGVjb21tZXJjZSBzY29wZSkKICAgICAgICAgICAgYXBpR2F0ZXdheSAtPiB1c2VyU2VydmljZSAiUm91dGVzIHVzZXIgcmVxdWVzdHMiICJIVFRQL0pTT04iCiAgICAgICAgICAgIGFwaUdhdGV3YXkgLT4gb3JkZXJTZXJ2aWNlICJSb3V0ZXMgb3JkZXIgcmVxdWVzdHMiICJIVFRQL0pTT04iCgogICAgICAgICAgICB1c2VyU2VydmljZSAtPiBwb3N0Z3Jlc0RiICJSZWFkcy93cml0ZXMgdXNlciBkYXRhIiAiVENQL1NRTCIKICAgICAgICAgICAgdXNlclNlcnZpY2UgLT4gcmVkaXNDYWNoZSAiQ2FjaGVzIHNlc3Npb25zIiAiVENQL1JlZGlzIFByb3RvY29sIgoKICAgICAgICAgICAgb3JkZXJTZXJ2aWNlIC0+IHBvc3RncmVzRGIgIlJlYWRzL3dyaXRlcyBvcmRlciBkYXRhIiAiVENQL1NRTCIKICAgICAgICAgICAgb3JkZXJTZXJ2aWNlIC0+IHVzZXJTZXJ2aWNlICJWYWxpZGF0ZXMgdXNlcnMiICJIVFRQL0pTT04iCiAgICAgICAgICAgIG9yZGVyU2VydmljZSAtPiByYWJiaXRNcSAiUHVibGlzaGVzIG9yZGVyIGV2ZW50cyIgIkFNUVAiCgogICAgICAgICAgICBub3RpZmljYXRpb25TZXJ2aWNlIC0+IHJhYmJpdE1xICJDb25zdW1lcyBvcmRlciBldmVudHMiICJBTVFQIgogICAgICAgIH0KCiAgICAgICAgIyBTeXN0ZW0gQ29udGV4dCByZWxhdGlvbnNoaXBzCiAgICAgICAgY3VzdG9tZXIgLT4gZWNvbW1lcmNlICJQbGFjZXMgb3JkZXJzLCBtYW5hZ2VzIGFjY291bnQiCiAgICAgICAgYWRtaW4gLT4gZWNvbW1lcmNlICJNYW5hZ2VzIHByb2R1Y3RzIGFuZCBvcmRlcnMiCiAgICAgICAgZWNvbW1lcmNlIC0+IHBheW1lbnRHYXRld2F5ICJQcm9jZXNzZXMgcGF5bWVudHMiCiAgICAgICAgZWNvbW1lcmNlIC0+IGVtYWlsUHJvdmlkZXIgIlNlbmRzIHRyYW5zYWN0aW9uYWwgZW1haWxzIgoKICAgICAgICAjIFBlcnNvbiB0byBjb250YWluZXIgcmVsYXRpb25zaGlwcwogICAgICAgIGN1c3RvbWVyIC0+IGFwaUdhdGV3YXkgIk1ha2VzIEFQSSByZXF1ZXN0cyIgIkhUVFBTL0pTT04iCiAgICAgICAgYWRtaW4gLT4gYXBpR2F0ZXdheSAiTWFrZXMgQVBJIHJlcXVlc3RzIiAiSFRUUFMvSlNPTiIKCiAgICAgICAgIyBFeHRlcm5hbCBzeXN0ZW0gcmVsYXRpb25zaGlwcwogICAgICAgIG5vdGlmaWNhdGlvblNlcnZpY2UgLT4gZW1haWxQcm92aWRlciAiU2VuZHMgZW1haWxzIiAiU01UUCIKCiAgICAgICAgIyBDb21wb25lbnQtbGV2ZWwgcmVsYXRpb25zaGlwcyAoVXNlciBTZXJ2aWNlKQogICAgICAgIGFwaUdhdGV3YXkgLT4gdXNlckNvbnRyb2xsZXIgIlJvdXRlcyByZXF1ZXN0cyIKICAgICAgICB1c2VyQ29udHJvbGxlciAtPiBhdXRoU2VydmljZSAiQXV0aGVudGljYXRlcyByZXF1ZXN0cyIKICAgICAgICB1c2VyQ29udHJvbGxlciAtPiB1c2VyUmVwb3NpdG9yeSAiQ1JVRCBvcGVyYXRpb25zIgogICAgICAgIGF1dGhTZXJ2aWNlIC0+IGNhY2hlU2VydmljZSAiU3RvcmVzL3ZhbGlkYXRlcyBzZXNzaW9ucyIKICAgICAgICB1c2VyUmVwb3NpdG9yeSAtPiBwb3N0Z3Jlc0RiICJTUUwgcXVlcmllcyIKICAgICAgICBjYWNoZVNlcnZpY2UgLT4gcmVkaXNDYWNoZSAiQ2FjaGUgb3BlcmF0aW9ucyIKCiAgICAgICAgIyBDb21wb25lbnQtbGV2ZWwgcmVsYXRpb25zaGlwcyAoT3JkZXIgU2VydmljZSkKICAgICAgICBhcGlHYXRld2F5IC0+IG9yZGVyQ29udHJvbGxlciAiUm91dGVzIHJlcXVlc3RzIgogICAgICAgIG9yZGVyQ29udHJvbGxlciAtPiBvcmRlclByb2Nlc3NvciAiUHJvY2Vzc2VzIG9yZGVycyIKICAgICAgICBvcmRlclByb2Nlc3NvciAtPiBvcmRlclJlcG9zaXRvcnkgIlBlcnNpc3RzIG9yZGVycyIKICAgICAgICBvcmRlclByb2Nlc3NvciAtPiBtZXNzYWdlUHVibGlzaGVyICJQdWJsaXNoZXMgZXZlbnRzIgogICAgICAgIG9yZGVyUmVwb3NpdG9yeSAtPiBwb3N0Z3Jlc0RiICJTUUwgcXVlcmllcyIKICAgICAgICBtZXNzYWdlUHVibGlzaGVyIC0+IHJhYmJpdE1xICJQdWJsaXNoZXMgbWVzc2FnZXMiCgogICAgICAgICMgQ29tcG9uZW50LWxldmVsIHJlbGF0aW9uc2hpcHMgKE5vdGlmaWNhdGlvbiBTZXJ2aWNlKQogICAgICAgIG1lc3NhZ2VDb25zdW1lciAtPiByYWJiaXRNcSAiU3Vic2NyaWJlcyB0byBldmVudHMiCiAgICAgICAgbWVzc2FnZUNvbnN1bWVyIC0+IGVtYWlsU2VuZGVyICJUcmlnZ2VycyBlbWFpbHMiCiAgICAgICAgZW1haWxTZW5kZXIgLT4gZW1haWxQcm92aWRlciAiU2VuZHMgdmlhIFNNVFAiCiAgICB9CgogICAgdmlld3MgewogICAgICAgIHN5c3RlbUNvbnRleHQgZWNvbW1lcmNlICJTeXN0ZW1Db250ZXh0IiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgICAgICBhdXRvTGF5b3V0CiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJTeXN0ZW0gQ29udGV4dCBkaWFncmFtIHNob3dpbmcgdGhlIGUtY29tbWVyY2UgcGxhdGZvcm0gYW5kIGl0cyBleHRlcm5hbCBkZXBlbmRlbmNpZXMiCiAgICAgICAgfQoKICAgICAgICBjb250YWluZXIgZWNvbW1lcmNlICJDb250YWluZXJzIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgICAgICBhdXRvTGF5b3V0CiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJDb250YWluZXIgZGlhZ3JhbSBzaG93aW5nIHRoZSBtaWNyb3NlcnZpY2VzIGFyY2hpdGVjdHVyZSIKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCB1c2VyU2VydmljZSAiVXNlclNlcnZpY2VDb21wb25lbnRzIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgICAgICBhdXRvTGF5b3V0CiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJDb21wb25lbnQgZGlhZ3JhbSBmb3IgdGhlIFVzZXIgU2VydmljZSIKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBvcmRlclNlcnZpY2UgIk9yZGVyU2VydmljZUNvbXBvbmVudHMiIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgICAgIGF1dG9MYXlvdXQKICAgICAgICAgICAgZGVzY3JpcHRpb24gIkNvbXBvbmVudCBkaWFncmFtIGZvciB0aGUgT3JkZXIgU2VydmljZSIKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBub3RpZmljYXRpb25TZXJ2aWNlICJOb3RpZmljYXRpb25TZXJ2aWNlQ29tcG9uZW50cyIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICAgICAgYXV0b0xheW91dAogICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ29tcG9uZW50IGRpYWdyYW0gZm9yIHRoZSBOb3RpZmljYXRpb24gU2VydmljZSIKICAgICAgICB9CgogICAgICAgIHN0eWxlcyB7CiAgICAgICAgICAgIGVsZW1lbnQgIlBlcnNvbiIgewogICAgICAgICAgICAgICAgc2hhcGUgUGVyc29uCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICMwODQyN0IKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDdXN0b21lciIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMDg0MjdCCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiQWRtaW4iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzk5OTk5OQogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIlNvZnR3YXJlIFN5c3RlbSIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMTE2OEJECiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiRXh0ZXJuYWwgU3lzdGVtIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM5OTk5OTkKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDb250YWluZXIiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzQzOERENQogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIlNlcnZpY2UiIHsKICAgICAgICAgICAgICAgIHNoYXBlIFJvdW5kZWRCb3gKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJHYXRld2F5IiB7CiAgICAgICAgICAgICAgICBzaGFwZSBIZXhhZ29uCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiRGF0YWJhc2UiIHsKICAgICAgICAgICAgICAgIHNoYXBlIEN5bGluZGVyCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiUXVldWUiIHsKICAgICAgICAgICAgICAgIHNoYXBlIFBpcGUKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDb21wb25lbnQiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzg1QkJGMAogICAgICAgICAgICAgICAgY29sb3IgIzAwMDAwMAogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQp9"
+  },
+  "views" : {
+    "componentViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "containerId" : "7",
+      "description" : "Component diagram for the User Service",
+      "dimensions" : {
+        "height" : 3219,
+        "width" : 2318
+      },
+      "elements" : [ {
+        "id" : "6",
+        "x" : 615,
+        "y" : 162
+      }, {
+        "id" : "8",
+        "x" : 615,
+        "y" : 762
+      }, {
+        "id" : "9",
+        "x" : 240,
+        "y" : 1362
+      }, {
+        "id" : "10",
+        "x" : 990,
+        "y" : 1362
+      }, {
+        "id" : "11",
+        "x" : 240,
+        "y" : 1962
+      }, {
+        "id" : "20",
+        "x" : 1648,
+        "y" : 1962
+      }, {
+        "id" : "21",
+        "x" : 240,
+        "y" : 2562
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "UserServiceComponents",
+      "name" : "Component View: E-Commerce Platform - User Service",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "38"
+      }, {
+        "id" : "39"
+      }, {
+        "id" : "40"
+      }, {
+        "id" : "41"
+      }, {
+        "id" : "42"
+      }, {
+        "id" : "43"
+      } ]
+    }, {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "containerId" : "12",
+      "description" : "Component diagram for the Order Service",
+      "dimensions" : {
+        "height" : 3219,
+        "width" : 1680
+      },
+      "elements" : [ {
+        "id" : "6",
+        "x" : 614,
+        "y" : 162
+      }, {
+        "id" : "13",
+        "x" : 614,
+        "y" : 762
+      }, {
+        "id" : "14",
+        "x" : 614,
+        "y" : 1362
+      }, {
+        "id" : "15",
+        "x" : 239,
+        "y" : 1962
+      }, {
+        "id" : "16",
+        "x" : 989,
+        "y" : 1962
+      }, {
+        "id" : "20",
+        "x" : 239,
+        "y" : 2562
+      }, {
+        "id" : "22",
+        "x" : 989,
+        "y" : 2562
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "OrderServiceComponents",
+      "name" : "Component View: E-Commerce Platform - Order Service",
+      "order" : 4,
+      "relationships" : [ {
+        "id" : "44"
+      }, {
+        "id" : "45"
+      }, {
+        "id" : "46"
+      }, {
+        "id" : "47"
+      }, {
+        "id" : "48"
+      }, {
+        "id" : "49"
+      } ]
+    }, {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "containerId" : "17",
+      "description" : "Component diagram for the Notification Service",
+      "dimensions" : {
+        "height" : 1940,
+        "width" : 1660
+      },
+      "elements" : [ {
+        "id" : "4",
+        "x" : 240,
+        "y" : 1383
+      }, {
+        "id" : "18",
+        "x" : 240,
+        "y" : 183
+      }, {
+        "id" : "19",
+        "x" : 240,
+        "y" : 783
+      }, {
+        "id" : "22",
+        "x" : 990,
+        "y" : 783
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "NotificationServiceComponents",
+      "name" : "Component View: E-Commerce Platform - Notification Service",
+      "order" : 5,
+      "relationships" : [ {
+        "id" : "50"
+      }, {
+        "id" : "51"
+      }, {
+        "id" : "52"
+      } ]
+    } ],
+    "configuration" : {
+      "branding" : { },
+      "lastSavedView" : "Containers",
+      "metadataSymbols" : "SquareBrackets",
+      "styles" : {
+        "elements" : [ {
+          "background" : "#999999",
+          "tag" : "Admin"
+        }, {
+          "background" : "#85bbf0",
+          "color" : "#000000",
+          "tag" : "Component"
+        }, {
+          "background" : "#438dd5",
+          "color" : "#ffffff",
+          "tag" : "Container"
+        }, {
+          "background" : "#08427b",
+          "tag" : "Customer"
+        }, {
+          "shape" : "Cylinder",
+          "tag" : "Database"
+        }, {
+          "background" : "#999999",
+          "color" : "#ffffff",
+          "tag" : "External System"
+        }, {
+          "shape" : "Hexagon",
+          "tag" : "Gateway"
+        }, {
+          "background" : "#08427b",
+          "color" : "#ffffff",
+          "shape" : "Person",
+          "tag" : "Person"
+        }, {
+          "shape" : "Pipe",
+          "tag" : "Queue"
+        }, {
+          "shape" : "RoundedBox",
+          "tag" : "Service"
+        }, {
+          "background" : "#1168bd",
+          "color" : "#ffffff",
+          "tag" : "Software System"
+        } ]
+      },
+      "terminology" : { }
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "description" : "Container diagram showing the microservices architecture",
+      "dimensions" : {
+        "height" : 3299,
+        "width" : 2829
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 199,
+        "y" : 143
+      }, {
+        "id" : "2",
+        "x" : 899,
+        "y" : 143
+      }, {
+        "id" : "4",
+        "x" : 2178,
+        "y" : 2043
+      }, {
+        "id" : "6",
+        "x" : 524,
+        "y" : 843
+      }, {
+        "id" : "7",
+        "x" : 370,
+        "y" : 2043
+      }, {
+        "id" : "12",
+        "x" : 678,
+        "y" : 1443
+      }, {
+        "id" : "17",
+        "x" : 1428,
+        "y" : 1443
+      }, {
+        "id" : "20",
+        "x" : 1120,
+        "y" : 2643
+      }, {
+        "id" : "21",
+        "x" : 370,
+        "y" : 2643
+      }, {
+        "id" : "22",
+        "x" : 1428,
+        "y" : 2043
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "Containers",
+      "name" : "Container View: E-Commerce Platform",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "23",
+        "vertices" : [ {
+          "x" : 528,
+          "y" : 1443
+        }, {
+          "x" : 528,
+          "y" : 1743
+        } ]
+      }, {
+        "id" : "24"
+      }, {
+        "id" : "25"
+      }, {
+        "id" : "26"
+      }, {
+        "id" : "27"
+      }, {
+        "id" : "28"
+      }, {
+        "id" : "29"
+      }, {
+        "id" : "30"
+      }, {
+        "id" : "35"
+      }, {
+        "id" : "36"
+      }, {
+        "id" : "37"
+      } ],
+      "softwareSystemId" : "5"
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "description" : "System Context diagram showing the e-commerce platform and its external dependencies",
+      "dimensions" : {
+        "height" : 2000,
+        "width" : 1600
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 250,
+        "y" : 142
+      }, {
+        "id" : "2",
+        "x" : 950,
+        "y" : 142
+      }, {
+        "id" : "3",
+        "x" : 200,
+        "y" : 1442
+      }, {
+        "id" : "4",
+        "x" : 950,
+        "y" : 1442
+      }, {
+        "id" : "5",
+        "x" : 575,
+        "y" : 842
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "SystemContext",
+      "name" : "System Context View: E-Commerce Platform",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "31"
+      }, {
+        "id" : "32"
+      }, {
+        "id" : "33"
+      }, {
+        "id" : "34"
+      } ],
+      "softwareSystemId" : "5"
+    } ]
+  }
+}

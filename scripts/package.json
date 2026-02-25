@@ -1,0 +1,13 @@
+{
+  "name": "living-c4-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for architecture drift detection and diagram generation",
+  "scripts": {
+    "detect-drift": "node detect-drift.js",
+    "validate-dsl": "node validate-dsl.js",
+    "generate-diagrams": "node generate-diagrams.js"
+  },
+  "dependencies": {
+    "yaml": "^2.3.4"
+  }
+}
